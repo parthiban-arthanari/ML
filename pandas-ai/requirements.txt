@@ -1,0 +1,13 @@
+pandasai
+mysql-connector-python
+SQLAlchemy
+pymysql
+langchain
+openai
+huggingface-hub
+python-dotenv
+pandas
+matplotlib
+seaborn
+jupyterlab
+notebook
