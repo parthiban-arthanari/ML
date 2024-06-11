@@ -1,0 +1,57 @@
+-- This table has the scrum teams and its sprint information
+CREATE TABLE SCRUM (
+    APPID VARCHAR(10) NOT NULL, unique id,      -- Team id, project id, Applicaion id
+    TEAMNAME VARCHAR(20),                       -- Team name, project name, application name, scrum team name
+    SPRINT VARCHAR(20),                         -- Sprint Name, Sprint Id, Sprint Number, Iteration Number
+    STARTDATE DATETIME,                         -- Sprint Start Date, Sprint Date, Work Start Date
+    ENDDATE DATETIME,                           -- Sprint End Date, Sprint Close, Work Completion, Date By which task will spill over
+    PLANNED NUMBER,                             -- No of Planned Story Points, Commited Story Points
+    DELIVERED NUMBER,                           -- No of Devlivered Story Points, Completed Story Points
+    RELEASEVERSION VARCHAR(20)                  -- Release Version, Relese Number
+)
+
+--Show me the velocity of team Lumen for last 4 sprints
+SELECT AVG(s.DELIVERED) AS velocity
+FROM Scrum s
+WHERE s.TEAMNAME = 'LUMEN'
+ORDER BY s.SPRINT DESC
+LIMIT 4;
+
+--How many team had spill over in last 2 sprints and how much points
+SELECT
+    s1.TEAMNAME,
+    (s1.PLANNED - s1.DELIVERED) AS SPILLOVER_POINTS
+FROM
+    Scrum s1
+WHERE
+    s1.DELIVERED < s1.PLANNED
+    AND s1.SPRINT IN (
+        SELECT
+            s2.SPRINT
+        FROM
+            Scrum s2
+        WHERE
+            s2.TEAMNAME = s1.TEAMNAME
+        ORDER BY
+            s2.STARTDATE DESC
+        LIMIT 2
+    )
+
+-- Inserting Values
+INSERT INTO SCRUM VALUES ('1LUM', 'LUMEN.AI', 'Platform.2024.8', '03/04/2024', '16/04/2024', 25, 25, '24.05')
+INSERT INTO SCRUM VALUES ('1LUM', 'LUMEN.AI', 'Platform.2024.9', '17/04/2024', '30/04/2024', 27, 23, '24.05')
+INSERT INTO SCRUM VALUES ('1LUM', 'LUMEN.AI', 'Platform.2024.10', '01/05/2024', '14/05/2024', 25, 27, '24.06')
+INSERT INTO SCRUM VALUES ('1LUM', 'LUMEN.AI', 'Platform.2024.11', '15/05/2024', '28/05/2024', 20, 22, '24.06')
+INSERT INTO SCRUM VALUES ('1LUM', 'LUMEN.AI', 'Platform.2024.12', '29/05/2024', '11/06/2024', 19, 15, '24.07')
+
+INSERT INTO SCRUM VALUES ('3FAL', 'FALCON', 'Platform.2024.8', '03/04/2024', '16/04/2024', 35, 30, '24.05')
+INSERT INTO SCRUM VALUES ('3FAL', 'FALCON', 'Platform.2024.9', '17/04/2024', '30/04/2024', 33, 30, '24.05')
+INSERT INTO SCRUM VALUES ('3FAL', 'FALCON', 'Platform.2024.10', '01/05/2024', '14/05/2024', 20, 30, '24.06')
+INSERT INTO SCRUM VALUES ('3FAL', 'FALCON', 'Platform.2024.11', '15/05/2024', '28/05/2024', 25, 22, '24.06')
+INSERT INTO SCRUM VALUES ('3FAL', 'FALCON', 'Platform.2024.12', '29/05/2024', '11/06/2024', 35, 35, '24.07')
+
+INSERT INTO SCRUM VALUES ('2NEX', 'NEXUS', 'Platform.2024.8', '03/04/2024', '16/04/2024', 15, 10, '24.05')
+INSERT INTO SCRUM VALUES ('2NEX', 'NEXUS', 'Platform.2024.9', '17/04/2024', '30/04/2024', 20, 20, '24.05')
+INSERT INTO SCRUM VALUES ('2NEX', 'NEXUS', 'Platform.2024.10', '01/05/2024', '14/05/2024', 22, 22, '24.06')
+INSERT INTO SCRUM VALUES ('2NEX', 'NEXUS', 'Platform.2024.11', '15/05/2024', '28/05/2024', 21, 22, '24.06')
+INSERT INTO SCRUM VALUES ('2NEX', 'NEXUS', 'Platform.2024.12', '29/05/2024', '11/06/2024', 20, 20, '24.07')
